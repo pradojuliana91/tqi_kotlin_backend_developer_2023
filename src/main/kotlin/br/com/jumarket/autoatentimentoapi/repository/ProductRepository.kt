@@ -5,5 +5,6 @@ import org.springframework.data.repository.CrudRepository
 import java.util.*
 
 interface ProductRepository : CrudRepository<ProductEntity, UUID> {
-    fun findBySku(sku: String): ProductEntity
+    fun findBySku(sku: String): ProductEntity?
+
 }
