@@ -4,11 +4,11 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.*
 
-data class ShoppingCartResponse(
+data class OrderResponse(
     var id: UUID,
     var createAt: LocalDateTime,
-    var totSaleValue: BigDecimal,
-    var items: List<ShoppingCartItemsResponse>
+    var typesPayments: List<String>,
+    var status: String,
+    var totOrderValue: BigDecimal,
+    var shoppingCart: ShoppingCartResponse
 )
-
-

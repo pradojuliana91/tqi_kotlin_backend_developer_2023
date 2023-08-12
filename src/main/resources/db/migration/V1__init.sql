@@ -3,14 +3,6 @@ create table produtos_categorias (
     nome varchar(100)
 );
 
-insert into produtos_categorias (id, nome) values ('f442a928-39de-410b-85ff-6be93f19e77c', 'Limpeza');
-insert into produtos_categorias (id, nome) values ('4a1f5305-0ebb-4ca6-924d-b19d67fce238', 'Bebidas');
-insert into produtos_categorias (id, nome) values ('4f97dde2-34e8-438d-9fd2-6ec7e5aabee1', 'Bombonier');
-insert into produtos_categorias (id, nome) values ('429a25a4-a1d8-4091-adc6-7deab184f2a8', 'Salgadinhos');
-insert into produtos_categorias (id, nome) values ('a1f68e45-7d57-435b-8dc7-240df384763a', 'Chás e Cafes');
-insert into produtos_categorias (id, nome) values ('d387d18a-bae9-47d8-8825-0269bf122cb7', 'Grãos e Cereais');
-insert into produtos_categorias (id, nome) values ('9a648531-73ff-4600-8efa-fbb5a81db90e', 'Outros');
-
 create table produtos (
     id uuid primary key,
     sku varchar(20) not null,
@@ -22,6 +14,44 @@ create table produtos (
 );
 
 ALTER TABLE produtos ADD CONSTRAINT fk_produtos_produtos_categorias FOREIGN KEY (produto_categoria_id) REFERENCES produtos_categorias (id);
+
+create table carrinhos (
+    id uuid primary key,
+    data_criacao timestamp NOT NULL,
+    valor_total_venda numeric(14,2) NOT NULL
+);
+
+create table carrinho_itens (
+    id uuid primary key,
+    carrinho_id uuid not null,
+    produto_id uuid not null,
+    quantidade int not null,
+    preco_venda numeric(14,2) NOT NULL,
+    valor_total numeric(14,2) NOT NULL
+);
+
+ALTER TABLE carrinho_itens ADD CONSTRAINT fk_carrinho_itens_carrinhos FOREIGN KEY (carrinho_id) REFERENCES carrinhos (id);
+ALTER TABLE carrinho_itens ADD CONSTRAINT fk_carrinho_itens_produtos FOREIGN KEY (produto_id) REFERENCES produtos (id);
+
+create table pedidos (
+    id uuid primary key,
+    data_criacao timestamp NOT NULL,
+    carrinho_id uuid not null,
+    status varchar(50) not null,
+    valor_total_pedido numeric(14,2) NOT NULL,
+    forma_pagamento varchar(50) null
+);
+
+ALTER TABLE pedidos ADD CONSTRAINT fk_pedidos_carrinhos FOREIGN KEY (carrinho_id) REFERENCES carrinhos (id);
+
+
+insert into produtos_categorias (id, nome) values ('f442a928-39de-410b-85ff-6be93f19e77c', 'Limpeza');
+insert into produtos_categorias (id, nome) values ('4a1f5305-0ebb-4ca6-924d-b19d67fce238', 'Bebidas');
+insert into produtos_categorias (id, nome) values ('4f97dde2-34e8-438d-9fd2-6ec7e5aabee1', 'Bombonier');
+insert into produtos_categorias (id, nome) values ('429a25a4-a1d8-4091-adc6-7deab184f2a8', 'Salgadinhos');
+insert into produtos_categorias (id, nome) values ('a1f68e45-7d57-435b-8dc7-240df384763a', 'Chás e Cafes');
+insert into produtos_categorias (id, nome) values ('d387d18a-bae9-47d8-8825-0269bf122cb7', 'Grãos e Cereais');
+insert into produtos_categorias (id, nome) values ('9a648531-73ff-4600-8efa-fbb5a81db90e', 'Outros');
 
 insert into produtos (id, sku, nome, produto_categoria_id, unidade_medida, preco_unitario, preco_venda) values ('66ae27af-9084-46ca-9ee9-1c78bbca170c','1','detergente','f442a928-39de-410b-85ff-6be93f19e77c','un', 2, 4);
 insert into produtos (id, sku, nome, produto_categoria_id, unidade_medida, preco_unitario, preco_venda) values ('2e5a9797-bafe-4917-aec8-712dbb669358','2','sabonete','f442a928-39de-410b-85ff-6be93f19e77c','un', 2, 3);

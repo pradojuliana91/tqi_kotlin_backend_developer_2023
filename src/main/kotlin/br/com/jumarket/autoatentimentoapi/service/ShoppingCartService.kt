@@ -1,20 +1,22 @@
 package br.com.jumarket.autoatentimentoapi.service
 
-import br.com.jumarket.autoatentimentoapi.controller.request.CreateShoppingCartRequest
+import br.com.jumarket.autoatentimentoapi.controller.request.ShoppingCartRequest
 import br.com.jumarket.autoatentimentoapi.controller.response.ProductCategoryResponse
 import br.com.jumarket.autoatentimentoapi.controller.response.ProductResponse
 import br.com.jumarket.autoatentimentoapi.controller.response.ShoppingCartItemsResponse
 import br.com.jumarket.autoatentimentoapi.controller.response.ShoppingCartResponse
 import br.com.jumarket.autoatentimentoapi.exception.BadRequestException
+import br.com.jumarket.autoatentimentoapi.exception.NotFoundException
 import br.com.jumarket.autoatentimentoapi.model.ShoppingCartEntity
 import br.com.jumarket.autoatentimentoapi.model.ShoppingCartItemsEntity
 import br.com.jumarket.autoatentimentoapi.repository.ProductRepository
 import br.com.jumarket.autoatentimentoapi.repository.ShoppingCartItemsRepository
 import br.com.jumarket.autoatentimentoapi.repository.ShoppingCartRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.UUID
-import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
+import java.math.BigDecimal
+import java.util.*
 
 
 @Service
@@ -24,10 +26,45 @@ class ShoppingCartService(
     private val productRepository: ProductRepository
 ) {
 
-    @Transactional
-    fun createShoppingCart(createShoppingCartRequest: CreateShoppingCartRequest): ShoppingCartResponse {
+    fun findById(id: UUID): ShoppingCartResponse {
 
-        val product = productRepository.findBySku(createShoppingCartRequest.productSku)
+        val shoppingCart = shoppingCartRepository.findByIdOrNull(id) ?: throw NotFoundException("Carrinho não existe")
+
+        val shoppingCartItems = shoppingCartItemsRepository.findByShoppingCartId(id)
+            ?: throw NotFoundException("Não existe item no carrinho")
+
+        val itemsResponse = shoppingCartItems.map { cartItem ->
+            ShoppingCartItemsResponse(
+                id = cartItem.id,
+                product = ProductResponse(
+                    id = cartItem.product.id,
+                    name = cartItem.product.name,
+                    costValue = cartItem.product.costValue,
+                    saleValue = cartItem.product.saleValue,
+                    sku = cartItem.product.sku,
+                    unidadeType = cartItem.product.unidadeType,
+                    productCategory = ProductCategoryResponse(
+                        cartItem.product.productCategory.id, cartItem.product.productCategory.name
+                    )
+                ),
+                amount = cartItem.amount,
+                saleValue = cartItem.saleValue,
+                totalValue = cartItem.totalValue
+            )
+        }
+
+        return ShoppingCartResponse(
+            id = shoppingCart.id,
+            createAt = shoppingCart.createdAt,
+            totSaleValue = shoppingCart.totSaleValue,
+            items = itemsResponse
+        )
+    }
+
+    @Transactional
+    fun createShoppingCart(shoppingCartRequest: ShoppingCartRequest): ShoppingCartResponse {
+
+        val product = productRepository.findBySku(shoppingCartRequest.productSku)
             ?: throw BadRequestException("Produto não cadastrado com este códio de barras")
 
         val shoppingCart = ShoppingCartEntity(totSaleValue = product.saleValue)
@@ -54,34 +91,79 @@ class ShoppingCartService(
                 sku = product.sku,
                 unidadeType = product.unidadeType,
                 productCategory = ProductCategoryResponse(
-                    product.productCategory.id,
-                    product.productCategory.name
+                    product.productCategory.id, product.productCategory.name
                 )
-            ), amount = shoppingCartItemsEntity.amount,
+            ),
+            amount = shoppingCartItemsEntity.amount,
             saleValue = shoppingCartItemsEntity.saleValue,
             totalValue = shoppingCartItemsEntity.totalValue
         )
 
-        val cartResponse = ShoppingCartResponse(
+        return ShoppingCartResponse(
             id = shoppingCart.id,
             createAt = shoppingCart.createdAt,
             totSaleValue = shoppingCart.totSaleValue,
-            items = setOf(itemResponse)
+            items = listOf(itemResponse)
         )
-
-        return cartResponse
     }
 
     @Transactional
-    fun addItemShoppingCart(id: UUID, createShoppingCartRequest: CreateShoppingCartRequest): ShoppingCartResponse {
+    fun addItemShoppingCart(id: UUID, shoppingCartRequest: ShoppingCartRequest): ShoppingCartResponse {
 
-        val product = productRepository.findBySku(createShoppingCartRequest.productSku)
-            ?: throw BadRequestException("Produto não cadastrado com este códio de barras")
+        val product = productRepository.findBySku(shoppingCartRequest.productSku)
+            ?: throw BadRequestException("Produto não cadastrado com este código de barras")
 
-        //busca se ja existe o mesmo produto dentro do carrinho
+        val shoppingCart = shoppingCartRepository.findByIdOrNull(id) ?: throw NotFoundException("Carrinho não existe")
 
-        // se existe o mesmo produto entao eu devo acrescentar na qtd e somar valores e salvar o carrinho e o item
+        val shoppingCartItem =
+            shoppingCartItemsRepository.findByShoppingCartIdAndProductSku(id, shoppingCartRequest.productSku)
+                ?.let { shoppingCartItem ->
+                    shoppingCartItem.amount += 1
+                    shoppingCartItem.totalValue =
+                        shoppingCartItem.saleValue.multiply(BigDecimal(shoppingCartItem.amount))
+                    shoppingCartItem
+                } ?: ShoppingCartItemsEntity(
+                shoppingCart = shoppingCart,
+                product = product,
+                amount = 1,
+                saleValue = product.saleValue,
+                totalValue = product.saleValue
+            )
 
-        // se nao é o mesmo segue o mesmo fluxo de ciração inicial sem a parte de criar o carrinho somente atualizar o carrinho e criar o item
+        shoppingCartItemsRepository.save(shoppingCartItem)
+
+        val shoppingCartItems = shoppingCartItemsRepository.findByShoppingCartId(id)
+            ?: throw NotFoundException("Não existe item no carrinho")
+
+        shoppingCart.totSaleValue = shoppingCartItems.map { item -> item.totalValue }.sumOf { it }
+
+        shoppingCartRepository.save(shoppingCart)
+
+        val itemsResponse = shoppingCartItems.map { cartItem ->
+            ShoppingCartItemsResponse(
+                id = cartItem.id,
+                product = ProductResponse(
+                    id = cartItem.product.id,
+                    name = cartItem.product.name,
+                    costValue = cartItem.product.costValue,
+                    saleValue = cartItem.product.saleValue,
+                    sku = cartItem.product.sku,
+                    unidadeType = cartItem.product.unidadeType,
+                    productCategory = ProductCategoryResponse(
+                        cartItem.product.productCategory.id, cartItem.product.productCategory.name
+                    )
+                ),
+                amount = cartItem.amount,
+                saleValue = cartItem.saleValue,
+                totalValue = cartItem.totalValue
+            )
+        }
+
+        return ShoppingCartResponse(
+            id = shoppingCart.id,
+            createAt = shoppingCart.createdAt,
+            totSaleValue = shoppingCart.totSaleValue,
+            items = itemsResponse
+        )
     }
 }

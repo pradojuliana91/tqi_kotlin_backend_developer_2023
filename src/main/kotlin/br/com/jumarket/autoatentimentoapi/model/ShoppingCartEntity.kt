@@ -17,6 +17,6 @@ data class ShoppingCartEntity(
     @Column(name = "valor_total_venda")
     var totSaleValue: BigDecimal = BigDecimal.ZERO,
 
-    @OneToMany(mappedBy = "shoppingCart", fetch = FetchType.EAGER)
-    var items: Set<ShoppingCartItemsEntity> = emptySet()
+    @OneToMany(mappedBy = "shoppingCart")
+    var items: List<ShoppingCartItemsEntity> = emptyList()
 )

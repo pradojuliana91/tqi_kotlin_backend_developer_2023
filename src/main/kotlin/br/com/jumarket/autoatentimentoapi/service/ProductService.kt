@@ -75,13 +75,13 @@ class ProductService(
             entity.saleValue = productRequest.saleValue
             entity.name = productRequest.name
             productRepository.save(entity)
-        } ?: throw NotFoundException("Produto não encontrada")
+        } ?: throw NotFoundException("Produto não encontrado")
     }
 
     fun deleteById(id: UUID) {
         productRepository.findByIdOrNull(id)?.let { entity ->
             productRepository.deleteById(entity.id)
-        } ?: throw NotFoundException("Produto não encontrada")
+        } ?: throw NotFoundException("Produto não encontrado")
     }
 
     private fun productEntityToResponse(productEntity: ProductEntity): ProductResponse {

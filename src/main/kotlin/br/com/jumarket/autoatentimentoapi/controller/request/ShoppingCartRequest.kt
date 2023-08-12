@@ -1,6 +1,6 @@
 package br.com.jumarket.autoatentimentoapi.controller.request
 
-data class CreateShoppingCartRequest(
+data class ShoppingCartRequest(
 
     var productSku: String
 
