@@ -45,6 +45,7 @@ create table pedidos (
 ALTER TABLE pedidos ADD CONSTRAINT fk_pedidos_carrinhos FOREIGN KEY (carrinho_id) REFERENCES carrinhos (id);
 
 
+
 insert into produtos_categorias (id, nome) values ('f442a928-39de-410b-85ff-6be93f19e77c', 'Limpeza');
 insert into produtos_categorias (id, nome) values ('4a1f5305-0ebb-4ca6-924d-b19d67fce238', 'Bebidas');
 insert into produtos_categorias (id, nome) values ('4f97dde2-34e8-438d-9fd2-6ec7e5aabee1', 'Bombonier');

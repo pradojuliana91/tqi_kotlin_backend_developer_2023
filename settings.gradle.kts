@@ -1,1 +1,1 @@
-rootProject.name = "auto-atentimento-api"
+rootProject.name = "auto-atendimento-api"

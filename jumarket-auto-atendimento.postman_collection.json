@@ -1,0 +1,441 @@
+{
+	"info": {
+		"_postman_id": "aca784aa-9ee6-49e9-8d72-a0d92473dccc",
+		"name": "jumarket-auto-atendimento",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27636745"
+	},
+	"item": [
+		{
+			"name": "produto-categora",
+			"item": [
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9090/product-categories",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"product-categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9090/product-categories/335f92bc-fc61-44f2-a198-e697a601dfb5",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"product-categories",
+								"335f92bc-fc61-44f2-a198-e697a601dfb5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"ju nunca escolhe nada\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9090/product-categories",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"product-categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"ju nunca escolhe mesmo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9090/product-categories/335f92bc-fc61-44f2-a198-e697a601dfb5",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"product-categories",
+								"335f92bc-fc61-44f2-a198-e697a601dfb5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:9090/product-categories/335f92bc-fc61-44f2-a198-e697a601dfb5",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"product-categories",
+								"335f92bc-fc61-44f2-a198-e697a601dfb5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "produto",
+			"item": [
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9090/products",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9090/products/fa27ade9-a97a-4a43-8430-d4b28f1fcff7",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"products",
+								"fa27ade9-a97a-4a43-8430-d4b28f1fcff7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findBySku",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9090/products/sku/666",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"products",
+								"sku",
+								"666"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sku\": \"666\",\r\n    \"name\": \"coca da ju\",\r\n    \"productCategoryId\": \"ccd9463b-1331-41b5-954b-2be6283ca033\",\r\n    \"unidadeType\": \"CX\",\r\n    \"costValue\": 44.22,\r\n    \"saleValue\": 134.22\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9090/products",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sku\": \"999\",\r\n    \"name\": \"coca da ju novo\",\r\n    \"productCategoryId\": \"4a1f5305-0ebb-4ca6-924d-b19d67fce238\",\r\n    \"unidadeType\": \"LT\",\r\n    \"costValue\": 44.33,\r\n    \"saleValue\": 251.33\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9090/products/fa27ade9-a97a-4a43-8430-d4b28f1fcff7",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"products",
+								"fa27ade9-a97a-4a43-8430-d4b28f1fcff7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:9090/products/a45a6d5e-d037-4ee8-8d0f-3dd3eeff6d52",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"products",
+								"a45a6d5e-d037-4ee8-8d0f-3dd3eeff6d52"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "carrinho",
+			"item": [
+				{
+					"name": "findById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9090/shopping-carts/958c4206-877b-40a8-88dc-4318978e134f",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"shopping-carts",
+								"958c4206-877b-40a8-88dc-4318978e134f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productSku\": \"666\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9090/shopping-carts",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"shopping-carts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addItem",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productSku\": \"2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9090/shopping-carts/958c4206-877b-40a8-88dc-4318978e134f",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"shopping-carts",
+								"958c4206-877b-40a8-88dc-4318978e134f"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "pedido",
+			"item": [
+				{
+					"name": "findById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9090/orders/958c4206-877b-40a8-88dc-4318978e134f",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"orders",
+								"958c4206-877b-40a8-88dc-4318978e134f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"shoppingCartId\": \"958c4206-877b-40a8-88dc-4318978e134f\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9090/orders",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pagar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"typePayment\": \"asdfasdf\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9090/orders/60585b6b-5bca-4746-857b-ca902ca05d13/payment",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"orders",
+								"60585b6b-5bca-4746-857b-ca902ca05d13",
+								"payment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cancelar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:9090/orders/958c4206-877b-40a8-88dc-4318978e134f/cancel",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"orders",
+								"958c4206-877b-40a8-88dc-4318978e134f",
+								"cancel"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
